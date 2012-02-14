@@ -1,0 +1,41 @@
+<p>MooTools is just the best JavaScript thing ever.  And I say that totally subjectively because I honestly don&#8217;t have much experience with anything else other than jQuery.  Some of the design decisions are nothing short of genius &#8212; custom events, element properties, and class mutators &#8212; to name a few.</p>
+<p>The <a href="http://www.clientcide.com/code-releases/classbinds-for-mootols-is-back/">Binds mutator</a> is particularly headache relieving.  My only issue with it is that you need to list out all the methods you want bound, which somehow, I am very prone to jacking up due to forgetfulness or quick refactoring.</p>
+<div>
+<pre><code class='javascript'>Binds : ['update', 'include', ...]  // yadi yada</code></pre>
+</div>
+<p>So since I have nothing better to do in the airport than watch a depressing <a href="http://www.fox.com/house/recaps/s5_e20.htm">House episode</a>, I figured I&#8217;d write my own BindAll mutator to save myself from my own misery (and maybe save you from yours).</p>
+<div>
+<pre><code class='javascript'>Class.Mutators.BindAll = function(self, bool) {
+if (!bool) return self;      // mutate or get out
+<p>var init = self.initialize;  // save original, if there is one<br />
+  var exclude = arguments.callee.exclude;</p>
+self.initialize = function() {
+for (var method in this) {
+if (typeof this[method] != &#8216;function&#8217; || exclude.contains(method))
+continue;
+<p>var unbound = this[method];<br />
+      this[method] = unbound.bind(this);<br />
+      this[method].<i>parent = unbound.</i>parent;<br />
+    }<br />
+    // if there was an original initialize, run it<br />
+    return init ? init.apply(this, arguments) : this;<br />
+  };</p>
+return self;
+<p>};</p>
+<p>Class.Mutators.BindAll.exclude = [&#8216;constructor&#8217;, &#8216;initialize&#8217;, &#8216;parent&#8217;];</code></pre></p>
+</div>
+<p>With this, all methods get bound, and it&#8217;s this simple:</p>
+<div>
+<pre><code class='javascript'>BindAll : true  // or anything else truthy</code></pre>
+</div>
+<p>So now, class methods can be passed around without fear of them forgetting who <code>this</code> is:</p>
+<div>
+<pre><code class='javascript'>$('flashing_red').addEvent('click', self.destruct);</code></pre>
+</div>
+<p>This might not be for everyone, but for me, I can&#8217;t see why I wouldn&#8217;t want all my methods to be bound properly, and if I do run into that scenario, then I&#8217;d fall back to the regular Binds mutator.  I also made the function name exclude list accessible to the programmer to add more if needed.  Bugfixes will be made on the <a href="http://gist.github.com/95379">GitHub Gist</a>.</p>
+<p>Another class mutator that has gotten a fair bit of my attention is Privates, which has had many implementations, including <a href="http://www.nwhite.net/2008/10/10/private-methods-with-mootools-update2/">Nathan White&#8217;s</a> (deeply flawed), <a href="http://thomasdullnig.blogspot.com/2009/01/private-members-in-mootools-i-do-it-my.html">Thomas Dullnig&#8217;s</a> (flawed), and <a href="http://mcarthurgfx.com/blog/article/getting-private-variables-in-a-mootools-class">Sean McCarthur&#8217;s</a> (not flawed, but not pretty either).  I&#8217;ve totally embarrassed myself in an email to <a href="http://www.clientcide.com/">Aaron Newton</a> over the matter, essentially arguing the inclusion of Nathan White&#8217;s implementation into More before realizing that it was creating a bunch of global variables.  Soon, I&#8217;ll write about my own implementation that I just made, as soon as I quadruple check that it isn&#8217;t flawed as well. That one will need specs!</p>
+
+
+
+
+

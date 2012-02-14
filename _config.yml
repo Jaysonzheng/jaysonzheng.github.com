@@ -1,2 +1,51 @@
-markdown: rdiscount
-pygments: true
+pygments:       true
+permalink:      /:categories/:title/
+paginate:       5
+
+exclude:
+    - README.md
+    - Rakefile
+
+title:          郑瑞生blog
+url:            http://jaysonzheng.github.com
+feed:           /atom.xml
+description:    "关注各种技术，对新鲜事物有强烈的探索欲"
+comment:        "各种技术，各种吐槽"
+
+author:
+    name:       Jayson Zheng
+    email:      xiaoshengaya@gmail.com
+    twitter:    jayson    
+about: >
+    hello world.
+    
+disqus:
+    id:         Jayson
+
+nav:
+    - name:     Blog
+      url:      /
+    
+        
+    - name:     About
+      url:      /about/
+      subnav:
+        - name: Contact
+          url:  mailto:xiaoshengaya@gmail.com
+    
+
+footer:
+     
+copyright:
+    - Design by <a href="http://ipsleung.com">Iris Leung</a>
+    - "&copy; Copyright 2010, AppDen. All Rights Reserved."
+      
+css:
+    - /lib/appden.css
+    - /lib/syntax.css
+    
+js:
+    - http://ajax.googleapis.com/ajax/libs/mootools/1.2.4/mootools-yui-compressed.js
+    - /lib/mootools-more.js
+    - /lib/appden.js
+comment:        各种技术，各种吐槽

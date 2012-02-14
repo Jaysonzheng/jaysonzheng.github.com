@@ -1,0 +1,47 @@
+<p>Lately, I&#8217;ve been bothered about the amount of typing and lines required to create a simple element in MooTools.</p>
+<div>
+<pre><code class='javascript'>var curly = new Element('div', {
+id : &#8216;curly&#8217;,
+&#8216;class&#8217; : &#8216;stooge&#8217;
+<p>});</code></pre></p>
+</div>
+<p>In jQuery, you&#8217;re given the convenience of writing <span class="caps">HTML</span> into the jQuery function &#8212;</p>
+<div>
+<pre><code class='javascript'>var $curly = $('&amp;lt;div id=&amp;quot;curly&amp;quot; class=&amp;quot;stooge&amp;quot; /&amp;gt;');</code></pre>
+</div>
+<p>To me, this is quick and easy, but it&#8217;s very unnatural typing <span class="caps">HTML</span> into JavaScript and I&#8217;ve seen this convenience become quickly (and horrifyingly) abused.<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>  MooTools deserves something cleaner and cooler, so today I realized I could use a limited selector to create an element.  I liked that idea very much.</p>
+<div>
+<pre><code class='javascript'>var curly = $E('div#curly.stooge');</code></pre>
+</div>
+<p><ins>(<strong>update:</strong> Apparently I&#8217;m not the first to think of this.  A couple weeks before I wrote this post, <a href="http://github.com/kamicane/mootools-core/commit/c157e231c36d9935053b26dedd08eeb50560f82f">this commit</a> was made to MooTools 2.0 adding this capability to <code>new Element</code>. The idea came from <a href="http://subtlegradient.com/">Thomas Aylott</a>.  I am so happy to see this become a part of the next version of MooTools!)</ins></p>
+<p>I know, <code>$E</code> was used in MooTools 1.1 for finding an element by a selector with an optional filter, but that is longer the case in MooTools 1.2.  Besides, <code>$A</code> and <code>$H</code> are used for to <em>create</em> a new array or hash, respectively, so it seems only natural to me to use <code>$E</code> for creating an element.  If you don&#8217;t like my reasoning, then you can change the name and I promise I won&#8217;t hunt you down.</p>
+<div>
+<pre><code class='javascript'>function $E(tag, props) {
+if (typeof props == &#8216;string&#8217;)
+props = { style : props };
+if (typeof tag == &#8216;string&#8217;) {
+var id = tag.match(/#([\w-]+)/);
+var classes = tag.match(/(?:\.[\w-]<ins>)</ins>/);
+tag = tag.replace(/[#.].*/, &#8217;&#8217;);
+props = props || {};
+if (id) props.id = id<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>;
+if (classes) props[&#8216;class&#8217;] = classes<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>.replace(/\./g, &#8217; &#8217;);
+}
+return new Element(tag || &#8216;div&#8217;, props);
+<p>};</code></pre></p>
+</div>
+<p><ins>(<strong>edit:</strong> a style string can now optionally be passed into props, further updates will be on GitHub <a href="http://gist.github.com/91433">here</a>)</ins></p>
+<p>With this new magical utility function, you can quickly and easily create elements with an optional id and any number of classes, along with additional properties passed into the optional second argument.  In fact, you can omit a tag and it&#8217;ll default to a <code>&lt;div&gt;</code>.</p>
+<div>
+<pre><code class='javascript'>var moe = $E('#moe.stooge.leader', {...});</code></pre>
+</div>
+<p>I&#8217;m pretty excited about using this new shortcut, and I hope you are too.  Please shout out in the comments if you find it useful or have any tweaks.</p>
+<p><strong>Note to plugin developers:</strong> If you decide to use this, please place it inside of a closure so it doesn&#8217;t override someone else&#8217;s <code>$E</code> function.  I saw this suggestion on the <a href="twitter">MooTools Twitter</a><sup class="footnote" id="fnr2"><a href="#fn2">2</a></sup> so I can imagine this becoming a problem &#8212;</p>
+<div>
+<pre><code class='javascript'>$E = document.getElement.bind(document);</code></pre>
+</div>
+<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> Some even prefer to use double quotes and then escape all the attribute quotes.  Ughh!</p>
+<p class="footnote" id="fn2"><a href="#fnr2"><sup>2</sup></a> My <a href="http://appden.com/javascript/fun-with-custom-events-on-elements-in-mootools">last post</a> on custom events was linked there!</p>
+
+
+

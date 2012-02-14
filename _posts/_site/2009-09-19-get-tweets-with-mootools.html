@@ -1,0 +1,40 @@
+<p>To give this site a little <em>dynamism</em>, I decided (as many others have) to pull my latest tweets into the rather barren sidebar.  David Walsh&#8217;s <a href="http://davidwalsh.name/mootools-twitter-plugin">TwitterGitter</a> was a good start, but I saw some room for improvement by subclassing <code>Request.JSONP</code>.  The result is a great example of how <a href="http://mootools.net">MooTools</a> grants you a great deal of object oriented power. I kept David&#8217;s <code>linkify</code> method (with some regex tweaks) because it is awesome.</p>
+<div>
+<pre><code class='javascript'>Request.Twitter = new Class({
+Extends: Request.<span class="caps">JSONP</span>,
+options: {
+linkify: true,
+url: &#8216;http://twitter.com/statuses/user_timeline/{term}.json&#8217;,
+data: {
+count: 5
+}
+},
+
+initialize: function(term, options){
+this.parent(options);
+this.options.url = this.options.url.substitute({term: term});
+},
+
+success: function(data, script){
+if (this.options.linkify) data.each(function(tweet){
+tweet.text = this.linkify(tweet.text);
+}, this);
+
+// keep subsequent calls newer
+if (data<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>) this.options.data.since_id = data<sup class="footnote" id="fnr0"><a href="#fn0">0</a></sup>.id;
+
+this.parent(data, script);
+},
+
+linkify: function(text){
+// modified from TwitterGitter by David Walsh (davidwalsh.name)
+// courtesy of Jeremy Parrish (rrish.org)
+return text.replace(/(https?:\/\/[\w\-:;?&amp;=<ins>.%#\/]</ins>)/gi, &#8216;&lt;a href=&quot;$1&quot;&gt;$1&lt;/a&gt;&#8217;)
+.replace(/(^|\W)<code>(\w+)/g, '$1&amp;lt;a href=&amp;quot;http://twitter.com/$2&amp;quot;&amp;gt;</code>$2&lt;/a&gt;&#8217;)
+.replace(/(^|\W)#(\w+)/g, &#8216;$1#&lt;a href=&quot;http://search.twitter.com/search?q=%23$2&quot;&gt;$2&lt;/a&gt;&#8217;);
+}
+
+<p>});</code></pre></p>
+</div>
+<p>Hopefully the code speaks for itself. I&#8217;ll keep <a href="http://gist.github.com/189534">this Gist</a> updated with any bugfixes.</p>
+

@@ -1,0 +1,16 @@
+<p>I did it.  I&#8217;ve freed myself from the shackles of a database, excessively complex blogging software, and many wasted computing cycles.  I&#8217;ve escaped to the greener pastures of text and git with <a href="http://jekyllrb.com/">Jekyll</a>, the same engine that powers <a href="http://pages.github.com/">GitHub Pages</a>.  You can too!</p>
+<p>It&#8217;s very simple, check out this site&#8217;s <a href="http://github.com/appden/appden.github.com/tree">source</a> to see what I mean.  Feel free to &#8220;steal&#8221; my code.  I kept it general enough where changing the <span class="caps">YAML</span> and <span class="caps">CSS</span> will give you a brand new working blog.  It&#8217;s hard to even describe how easy it will be to manage this site thanks to Jekyll.  It&#8217;s so simple and powerful, yet young and full of potential.</p>
+<h3>Deploys</h3>
+<p>Tate Johnson has an <a href="http://tatey.com/2009/04/29/jekyll-meets-dreamhost-automated-deployment-for-jekyll-with-git.html">excellent post</a> on setting up deploys to DreamHost using <code>git push</code>, but I wanted my setup to be even simpler so I opted for rsync controlled by Rake.  This translates into needing <strong>zero</strong> setup on the server, just <code>sudo gem install jekyll</code> on your machine to develop locally.  See my Rakefile if you&#8217;re curious, it&#8217;s very easy to understand once you see it.</p>
+<h3>Comments</h3>
+<p>Easy. <a href="http://disqus.com"><span class="caps">DISQUS</span></a>. Done. Next question.</p>
+<h3>Movable Type</h3>
+<p><a href="http://www.movabletype.org/">Movable Type</a> provides hideous default templates and a very programmer-<strong>un</strong>friendly template language.  While I believe it&#8217;s cleaner than <a href="http://wordpress.org/">Wordpress</a>, it still suffers from having being too complicated for the average blogger.   The experience of editing templates is dreadful, unless you have manually &#8220;linked&#8221; each individual template to a file then setup <span class="caps">SVN</span> hooks to update those files and trigger a full rebuild of your site.  Even after all that, it&#8217;s still awful, and don&#8217;t get me started on maintaining a separate development version of your blog.</p>
+<h3>Conclusion</h3>
+<p>This site is now completely naked, the source exposed for all the world to gawk at on GitHib, so <a href="http://github.com/appden/appden.github.com/tree">check it out</a>.  I&#8217;m loving the feeling of complete transparency, it forces me to write better quality, more generic code.  Thanks to Jekyll, I&#8217;ll be able to happily further develop my site, rather than dread touching it.</p>
+
+
+
+
+
+

@@ -1,15 +1,34 @@
 ---
 layout: default
 ---
-<div id="post">
-{{ content }}
+
+{% assign post = page %}
+{% assign detail = true %}
+
+{% include post.html %}
+
+<div id="pagination">
+	{% if page.previous %}
+		<a class="prev" href="{{ page.previous.url }}">&laquo; {{ page.previous.title | truncatewords:5 }}</a>
+	{% endif %}
+	
+	{% if page.next %}
+		<a class="next" href="{{ page.next.url }}">{{ page.next.title | truncatewords:5 }} &raquo;</a>
+	{% endif %}
 </div>
 
-<div id="related">
-  <h2>Related Posts</h2>
-  <ul class="posts">
-    {% for post in site.related_posts limit:3 %}
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
-  </ul>
+<div id="comments">
+	<div id="disqus_thread"></div>
+
+	<script type="text/javascript">
+		var disqus_developer = (/localhost|github|dev/i).test(location.host);
+	</script>
+
+	<script type="text/javascript" src="http://disqus.com/forums/{{ site.disqus.id }}/embed.js"></script>
+
+	<noscript>
+		<a href="http://{{ site.disqus.id }}.disqus.com/?url=ref">View the discussion thread.</a>
+	</noscript>
 </div>
+
+

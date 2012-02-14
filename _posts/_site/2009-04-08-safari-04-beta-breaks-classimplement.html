@@ -1,0 +1,44 @@
+<p>I just spent a few hours tracking down this lovely bug that broke my <a href="http://appden.com/portfolio/">portfolio page</a> in Safari 4 Beta (build 5528.16).  If you add a property to a constructor&#8217;s prototype after initializing an object from that constructor, then that new property will not be enumerable in a for-in loop (presumably it&#8217;s been mistakenly marked <a href="https://developer.mozilla.org/en/ECMAScript_DontEnum_attribute">DontEnum</a>).</p>
+<p><ins>(<strong>update:</strong> The May 12th update to Safari 4 &#8211; build 5528.17 &#8211; fixes this issue, woohoo)</ins></p>
+<p>I first discovered this when the <a href="http://appden.com/javascript/fun-with-custom-events-on-elements-in-mootools/"><code>oneEvent</code></a> method that I added to the Events Class was not getting implemented into my other Classes.  The JS.Class blog <a href="http://blog.jcoglan.com/2009/03/04/urgent-bug-fix-release-for-jsclass-16/">mentioned</a> a <code>Function.prototype</code> enumeration bug that may be related, but other than that I couldn&#8217;t find any mention of this problem on Google.</p>
+<p>Here is the reduction that I submitted to Apple:</p>
+<div>
+<pre><code class='javascript'>// constructor
+<p>var House = function() {};<br />
+House.prototype = {<br />
+  garage : 1,<br />
+  yard : 1<br />
+};</p>
+<p>// this works<br />
+var house = new House;<br />
+for (var prop in house)<br />
+  print(&#8217;house has a &#8217; + prop);</p>
+<p>// add a new property after using constructor<br />
+House.prototype.pool = 1;</p>
+<p>// we can see the pool in the prototype<br />
+for (var prop in House.prototype)<br />
+  print(&#8217;blueprint contains &#8217; + prop);</p>
+<p>// enumeration won&#8217;t find the pool<br />
+var mansion = new House;<br />
+for (var prop in mansion)<br />
+  print(&#8217;mansion has a &#8217; + prop);</p>
+<p>// but the pool is there<br />
+print(&#8216;check for pool in house&#8230;&#8217; + !!house.pool);<br />
+print(&#8216;check for pool in mansion&#8230;&#8217; + !!mansion.pool);</p>
+<p>function print(line) { document.write(line + &#8216;&lt;br/&gt;&#8217;); }</code></pre></p>
+</div>
+<p>Which in Safari 4 Beta, yields&#8230;</p>
+<pre><code>house has a garage
+house has a yard
+pool now added to blueprint
+blueprint contains garage
+blueprint contains yard
+blueprint contains pool
+mansion has a garage
+mansion has a yard
+check for pool in house...true
+check for pool in mansion...true</code></pre>
+<p>The line, <strong>mansion has a pool</strong>, is never printed in Safari 4 Beta!  It does, however, get printed in the latest Webkit Nightly, but I&#8217;m not sure when this bug was fixed and if Apple has merged that fix into their Safari 4 branch.  I hope they have already, and if not, that they do so when they read my bug report.</p>
+<p>I hope this helped put somebody&#8217;s mind at ease.</p>
+
+

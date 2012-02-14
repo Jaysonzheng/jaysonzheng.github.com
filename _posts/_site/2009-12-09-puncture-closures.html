@@ -1,0 +1,26 @@
+<p>Have you ever wanted access to a closure&#8217;s precious private variables?  Has static scoping got you down?  Well put your mind at ease, and worry no longer!<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup></p>
+<div>
+<pre><code class='javascript'>Function.prototype.puncture = function(){
+var wormhole = function(<i>cmd</i>){
+return eval(<i>cmd</i>);
+};
+var source = (&#8217;&#8217; + this).match(/function.+?\{([\s\S]*)\}/)<sup class="footnote" id="fnr1"><a href="#fn1">1</a></sup>;
+var fn = new Function(&#8216;this.wormhole=&#8217; + wormhole + &#8216;\n&#8217; + source);
+fn.prototype = this.prototype;
+for (var prop in this){
+if (this.hasOwnProperty(prop)) fn[prop] = this[prop];
+}
+return fn;
+<p>};</code></pre></p>
+</div>
+<p>Now I know you&#8217;re excited, and probably asking yourself how you can start puncturing closures today.  Well here&#8217;s an example of how it works!</p>
+<div>
+<pre><code class='javascript'>var WellDesignedClass = function(){
+var secret = &#8216;Nobody can access this variable, muahahaha&#8217;;
+<p>};</p>
+<p>var PuncturedClass = WellDesignedClass.puncture();<br />
+var useless = new PuncturedClass;<br />
+var secret = useless.wormhole(&#8216;secret&#8217;); // not so secret anymore!</code></pre></p>
+</div>
+<p>You can watch <a href="http://gist.github.com/248013">this gist</a> for improvements on this must-have plugin!</p>
+<p class="footnote" id="fn1"><a href="#fnr1"><sup>1</sup></a> This code merely proves a concept. It could be fleshed out to actually accomplish things, but that would be insane.</p>

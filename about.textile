@@ -1,0 +1,16 @@
+--- 
+layout:     page
+permalink:  /about/
+title:      About Me
+---
+
+h2. About Me
+
+!>{margin-left: 10px;}/lib/images/me.png(Scott Kyle in MooTools shirt)!
+
+(double-space)* 郑瑞生 JaysonZheng
+* "新浪微博":http://weibo.com/xiaoshengaya
+* "博雅互动":http://www.boyaa.com
+* 关注互联网产品，游戏，技术
+* C/C++, Erlang, lua, IOS... 
+* 对各种技术有尝鲜的欲望，篮球控
