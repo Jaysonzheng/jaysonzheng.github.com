@@ -10,7 +10,7 @@ window.addEvents({
 		new Footnotes('#alpha a');
 		
 		$$('a[href^=mailto:]').unmaskEmail();
-		
+	/*	
 		new Request.Twitter('appden', {
 			data: { count: 3 },
 			onSuccess: function(tweets){
@@ -21,6 +21,7 @@ window.addEvents({
 					}).inject('tweets', 'top');
 			}
 		}).send();
+	*/
 	},
 	
 	load: function(){
